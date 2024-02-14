@@ -1,6 +1,16 @@
 [
   {
-    "hash": "f25b31f155970c46300934bda4a76cd2f581acab45c49762832ffdfddbcf9fdd",
-    "images": ["khasdjklhak"]
+    "filename": "video_36e4e6960437528505516aa3fe5a53b06f82038ab7fc519fc6a10fb143a3befc.mp4",
+    "hash": "36e4e6960437528505516aa3fe5a53b06f82038ab7fc519fc6a10fb143a3befc",
+    "metadata": {
+      "created": "2020-08-26T08:53:15.000Z",
+      "uploaded": "2024-02-14T19:18:19.813Z",
+      "duration": 511,
+      "dimentions": {
+        "width": 1280,
+        "height": 720
+      },
+      "codec": "avc1.640020"
+    }
   }
 ]
