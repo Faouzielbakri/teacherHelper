@@ -12,9 +12,26 @@ import { SVGProps, useEffect, useRef, useState } from "react";
 import Placeholder from "@/assets/placeholder.jpeg";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import ReactApexChart from "react-apexcharts";
+import { redirect, useRouter } from "next/navigation";
+import { toast } from "sonner";
 const ImageMotion = motion(Image);
 
-export default function VideoStats() {
+export default function VideoStats({ hash }: { hash: string }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const getVideoData = async () => {
+      const response = await fetch(`/api/videoData?hash=${hash}`);
+      if (response.ok) {
+        toast.success("Video is Found");
+      }
+      if (response.status === 500) {
+        toast.error("Error in the server while getting video");
+      }
+    };
+    hash && getVideoData();
+  }, [hash, router]);
+
   const emotionsData = [
     { name: "Happy", count: 10 },
     { name: "Sad", count: 5 },
@@ -109,24 +126,28 @@ export default function VideoStats() {
       series: [50],
     },
   };
-
+  const fetchVideoUrl = async () => {
+    const response = await fetch("/api/videoData", {
+      method: "POST",
+      body: JSON.stringify({
+        hash: "f25b31f155970c46300934bda4a76cd2f581acab45c49762832ffdfddbcf9fdd",
+      }),
+    });
+  };
   return (
     <AnimatePresence>
       <div className="flex flex-col w-full space-y-4">
         <Card>
           <CardHeader>
-            <CardTitle>Processed Video</CardTitle>
+            <CardTitle onClick={fetchVideoUrl}>Processed Video</CardTitle>
             <CardDescription>
               The result obtained and objects detected after processing the
               video
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 flex justify-center items-center">
-            <video className="w-4/5 rounded-lg" loop controls autoPlay>
-              <source
-                src={`/api/video-stream?hash=f25b31f155970c46300934bda4a76cd2f581acab45c49762832ffdfddbcf9fdd`}
-                type="video/mp4"
-              />
+            <video className="w-4/5 rounded-lg" loop controls autoPlay={true}>
+              <source src={`/api/video-stream?hash=${hash}`} type="video/mp4" />
             </video>
           </CardContent>
         </Card>

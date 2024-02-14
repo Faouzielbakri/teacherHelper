@@ -16,7 +16,7 @@ export default function page() {
           <CardTitle className="text-sm">Analytics</CardTitle>
         </CardHeader>
         <CardContent className="text-center">
-          <p className="text-sm">No video id is provided</p>
+          <p className="text-sm">No video with the given ID is found</p>
         </CardContent>
       </Card>
     </div>

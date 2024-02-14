@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 
-const databaseFile = path.join(process.cwd(), "../videos.json");
+const databaseFile = path.join(process.cwd(), "database/videos.json");
 
 export function readDatabase() {
   try {
@@ -15,5 +15,6 @@ export function readDatabase() {
 }
 
 export function writeDatabase(data: any) {
+  console.log("data", data);
   fs.writeFileSync(databaseFile, JSON.stringify(data, null, 2));
 }

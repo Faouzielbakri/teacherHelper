@@ -1,17 +1,12 @@
 import fs from "fs";
 import { join, extname } from "path";
-import { nanoid } from "nanoid";
-import crypto from "crypto";
 import { readDatabase, writeDatabase } from "@/app/utils";
-
-var MP4Box = require("mp4box"); // Or whatever import method you prefer.
 
 const uploadDir = join(process.cwd(), "/database/videos.json");
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const hash = searchParams.get("hash");
-
   try {
     const database = readDatabase();
     const video = database.find((v) => v.hash === hash);
@@ -27,33 +22,37 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const data = request.query;
-  console.log(data);
-  // const database = readDatabase();
-  // const existingVideoIndex = database.findIndex((v) => v.hash === data.hash);
+  const formData = await request.json(); // returns a Promise of FormData object
+  const database = readDatabase();
+  const existingVideoIndex = database.findIndex(
+    (v) => v.hash === formData.hash
+  );
 
-  // if (existingVideoIndex === -1) {
-  //   // Video with the same hash doesn't exist, so add the new video
-  //   database.push(data);
-  //   writeDatabase(database);
-  //   return Response.json({
-  //     success: true,
-  //     message: "Video added successfully.",
-  //   });
-  // } else {
-  //   database[existingVideoIndex] = { ...database[existingVideoIndex], ...data };
-  //   writeDatabase(database);
-  //   return Response.json({
-  //     success: true,
-  //     message: "Video updated successfully.",
-  //   });
-  // }
+  if (existingVideoIndex === -1) {
+    // Video with the same hash doesn't exist, so add the new video
+    database.push(formData);
+    writeDatabase(database);
+    return Response.json({
+      success: true,
+      message: "Video added successfully.",
+    });
+  } else {
+    database[existingVideoIndex] = {
+      ...database[existingVideoIndex],
+      ...formData,
+    };
+    writeDatabase(database);
+    return Response.json({
+      success: true,
+      message: "Video updated successfully.",
+    });
+  }
 }
 
 export async function DELETE(request: Request) {
-  console.log(request.query);
+  const formData = await request.json(); // returns a Promise of FormData object
+  const hash = formData["hash"];
 
-  const { hash } = req.query;
   try {
     const database = readDatabase();
     const filteredDatabase = database.filter((v) => v.hash !== hash);
