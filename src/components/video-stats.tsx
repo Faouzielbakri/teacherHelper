@@ -18,12 +18,16 @@ const ImageMotion = motion(Image);
 
 export default function VideoStats({ hash }: { hash: string }) {
   const router = useRouter();
-
+  const [videoData, setVideoData] = useState({});
   useEffect(() => {
     const getVideoData = async () => {
-      const response = await fetch(`/api/videoData?hash=${hash}`);
+      const response = await fetch(`/api/videoData?hash=${hash}`).then(
+        (response) => response.json()
+      );
       if (response.ok) {
         toast.success("Video is Found");
+        const data = await response.json();
+        setVideoData(data);
       }
       if (response.status === 500) {
         toast.error("Error in the server while getting video");
@@ -171,7 +175,7 @@ export default function VideoStats({ hash }: { hash: string }) {
             <CardHeader>
               <CardTitle>Video Stats</CardTitle>
               <CardDescription>
-                Statistics about the video content.
+                Statistics about the video content. {JSON.stringify(videoData)}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -182,7 +186,9 @@ export default function VideoStats({ hash }: { hash: string }) {
                 </div>
                 <div className="flex items-center py-1">
                   <dt className="min-w-[100px]">Resolution</dt>
-                  <dd className="ml-auto">1920x1080</dd>
+                  <dd className="ml-auto">
+                    {`${videoData?.metadata?.dimentions?.width}x${videoData?.metadata?.dimentions?.height}`}
+                  </dd>
                 </div>
                 <div className="flex items-center py-1">
                   <dt className="min-w-[100px]">Frame Rate</dt>
@@ -190,7 +196,7 @@ export default function VideoStats({ hash }: { hash: string }) {
                 </div>
                 <div className="flex items-center py-1">
                   <dt className="min-w-[100px]">Codec</dt>
-                  <dd className="ml-auto">H.264</dd>
+                  <dd className="ml-auto">{videoData?.metadata?.codec}</dd>
                 </div>
               </dl>
               <div className="grid grid-cols-2 min-h-lg w-full my-4">
