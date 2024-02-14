@@ -2,6 +2,7 @@
 import Dropzone, { DropZoneRef } from "@/components/DropZone";
 import Image from "next/image";
 import { useRef } from "react";
+import { toast } from "sonner";
 
 interface pageProps {}
 
@@ -14,7 +15,7 @@ export default function Page() {
     try {
       const formData = new FormData();
       files.forEach((file, index) => {
-        formData.append(`video_${index}`, file);
+        formData.append(`video`, file);
       });
 
       const response = await fetch("/api/uploadVideo", {
@@ -24,9 +25,11 @@ export default function Page() {
 
       if (response.ok) {
         console.log("Videos uploaded successfully!");
-        dropZoneRef.current?.deleteFiles();
+        toast.success("Videos uploaded successfully!");
+        // dropZoneRef.current?.deleteFiles();
       } else {
         console.error("Failed to upload videos.");
+        toast.error("Failed to upload videos.");
       }
     } catch (error) {
       console.error("Error uploading videos:", error);

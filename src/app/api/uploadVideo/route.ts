@@ -18,7 +18,6 @@ export async function POST(request: Request) {
   try {
     //@ts-expect-error
     for (const [name, file] of formData?.entries()) {
-      const uuid = nanoid();
       const extension = extname(file.name); // Get the file extension
       const hash = crypto.createHash("sha256");
 
@@ -29,7 +28,7 @@ export async function POST(request: Request) {
       hash.update(buffer);
       const fileHash = hash.digest("hex");
 
-      const filePath = join(uploadDir, `${name}_${uuid}${extension}`); // Define the path for the file
+      const filePath = join(uploadDir, `${name}_${fileHash}${extension}`); // Define the path for the file
       fs.writeFileSync(filePath, Buffer.from(fileData));
 
       var arrayBuffer = new Uint8Array(fs.readFileSync(filePath)).buffer;
@@ -44,7 +43,7 @@ export async function POST(request: Request) {
         const dimentions = tracks[0].video;
         const codec = tracks[0].codec;
         metadata.push({
-          filename: `${name}_${uuid}${extension}`,
+          filename: `${name}_${fileHash}${extension}`,
           hash: fileHash,
           metadata: {
             created,
@@ -61,7 +60,13 @@ export async function POST(request: Request) {
 
       console.log(`File saved: ${name}`);
     }
-    console.log(metadata);
+    metadata.forEach((videoMeta) => {
+      fetch("http://localhost:3000/api/videoDataUpdate", {
+        method: "POST", // Adjust method as needed
+        body: JSON.stringify(videoMeta), // Optional data to send
+        headers: { "Content-Type": "application/json" }, // Optional headers
+      });
+    });
     return new Response("Videos uploaded successfully.");
   } catch (error) {
     console.error("Error uploading videos:", error);

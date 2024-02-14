@@ -10,9 +10,8 @@ import { ArrowsPointingOutIcon, PlayIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { SVGProps, useEffect, useRef, useState } from "react";
 import Placeholder from "@/assets/placeholder.jpeg";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll } from "framer-motion";
 import ReactApexChart from "react-apexcharts";
-
 const ImageMotion = motion(Image);
 
 export default function VideoStats() {
@@ -20,6 +19,7 @@ export default function VideoStats() {
     { name: "Happy", count: 10 },
     { name: "Sad", count: 5 },
     { name: "Angry", count: 8 },
+
     // Add more emotions as needed
   ];
   const emotionChartOptions = {
@@ -113,6 +113,23 @@ export default function VideoStats() {
   return (
     <AnimatePresence>
       <div className="flex flex-col w-full space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Processed Video</CardTitle>
+            <CardDescription>
+              The result obtained and objects detected after processing the
+              video
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-4 flex justify-center items-center">
+            <video className="w-4/5 rounded-lg" loop controls autoPlay>
+              <source
+                src={`/api/video-stream?hash=f25b31f155970c46300934bda4a76cd2f581acab45c49762832ffdfddbcf9fdd`}
+                type="video/mp4"
+              />
+            </video>
+          </CardContent>
+        </Card>
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader>
@@ -180,6 +197,8 @@ export default function VideoStats() {
 }
 
 function FilterShower() {
+  const { scrollYProgress } = useScroll();
+
   const divRef = useRef(null);
   const [isImageExpanded, setIsImageExpanded] = useState(false);
   const [yPos, setYPos] = useState(0);
@@ -204,13 +223,13 @@ function FilterShower() {
       setXPos(newX - divRect.left - nSize / 4);
       setYPos(newY - divRect.top - nSize / 4);
     }
-  }, []);
+  }, [scrollY]);
 
   const variants = {
     initial: { left: 0, top: 0, zIndex: 1 },
     expanded: {
       left: xPos,
-      top: yPos,
+      top: yPos + scrollYProgress,
       zIndex: 99,
       width: newSize,
       height: newSize,
