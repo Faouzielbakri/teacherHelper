@@ -21,11 +21,6 @@ This project combines the power of Next.js for a dynamic frontend and Python for
 ## Technologies
 
 <div align="center"  >
-    <style>
-        .icons > div {
-            margin-right: 10px; /* Adjust the margin as needed */
-        }
-    </style>
     <div class='icons'>
     <img src="https://user-images.githubusercontent.com/25181517/192107004-2d2fff80-d207-4916-8a3e-130fee5ee495.png" alt="Kafka" title="Kafka" width="40" height="40"/>
     <img src="https://user-images.githubusercontent.com/25181517/202896760-337261ed-ee92-4979-84c4-d4b829c7355d.png" alt="Tailwind CSS" title="Tailwind CSS" width="40" height="40"/>
