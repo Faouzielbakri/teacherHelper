@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import logo from "@/assets/logoFpt.png";
+import logo from "@/assets/logo.png";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
@@ -10,14 +10,9 @@ import { redirect, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 function LandingPage() {
-  const [loginOpen, setLoginOpen] = useState(false);
   const callbackUrl = useSearchParams().get("callbackUrl") ?? "";
 
   const session = useSession();
-
-  useEffect(() => {
-    callbackUrl && setLoginOpen(true);
-  }, [callbackUrl]);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 p-8">
@@ -57,39 +52,11 @@ function LandingPage() {
           shadow-[-0.5rem_0.5rem_2rem_1px_rgb(0_0_0_/0.56)]
           `}
           >
-            {/* <ul className="flex w-3/5 h-full justify-evenly items-center">
-              <Link href="/">
-                <li className="border rounded-full px-8 py-2 text-violet-900 border-violet-500 hover:scale-95 hover:bg-violet-500 hover:text-white transition-all cursor-pointer">
-                  Home
-                </li>
-              </Link>
-              <Link href="/about">
-                <li className="border rounded-full px-8 py-2 text-violet-900 border-violet-500 hover:scale-95 hover:bg-violet-500 hover:text-white transition-all cursor-pointer">
-                  About us
-                </li>
-              </Link>
-              <Link href="/contact">
-                <li className="border rounded-full px-8 py-2 text-violet-900 border-violet-500 hover:scale-95 hover:bg-violet-500 hover:text-white transition-all cursor-pointer">
-                  Contact
-                </li>
-              </Link>
-            </ul> */}
-            {session ? (
-              <Link href="/dashboard">
-                <span className="border rounded-full px-8 py-3 h-12  border-white text-white bg-violet-500 hover:scale-95 hover:bg-white hover:border-violet-500 hover:text-violet-500  transition-all ">
-                  Get Started
-                </span>
-              </Link>
-            ) : (
-              <button
-                className="border rounded-full px-8 h-12  border-white text-white bg-violet-500 hover:scale-95 hover:bg-white hover:border-violet-500 hover:text-violet-500  transition-all "
-                onClick={() => {
-                  setLoginOpen(true);
-                }}
-              >
+            <Link href="/dashboard">
+              <span className="border rounded-full px-8 py-3 h-12  border-white text-white bg-violet-500 hover:scale-95 hover:bg-white hover:border-violet-500 hover:text-violet-500  transition-all ">
                 Get Started
-              </button>
-            )}
+              </span>
+            </Link>
           </div>
         </header>
         <AnimatePresence>
@@ -167,7 +134,7 @@ function LandingPage() {
           `}
         >
           <span className="text-gray-500 text-lg font-medium ">
-            Made By M1 Big Data & AI Students | FP-Taroudant
+            Made By FAOUZI EL BAKRI
           </span>
         </footer>
       </div>
